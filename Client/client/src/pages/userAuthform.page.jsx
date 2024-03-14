@@ -2,10 +2,11 @@ import React from 'react'
 import Inputbox from '../components/input.component'
 import { FaGoogle } from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import AnimationWrapper from '../Common/page-animation'
 
 export default function UserAuthform({type}) {
   return (
-    <div>
+    <AnimationWrapper keyValue={type}>
         <section className='h-cover flex items-center justify-center'>
             <form className='w-[80%] max-w-[400px]'>
                 <h1 className='text-center text-4xl font-gelasio capitalize mb-24  '>
@@ -65,6 +66,6 @@ export default function UserAuthform({type}) {
 
         </section>
       
-    </div>
+    </AnimationWrapper>
   )
 }
