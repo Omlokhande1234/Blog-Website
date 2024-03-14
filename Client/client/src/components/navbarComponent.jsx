@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import logo from '../imgs/logo.png';
-import {Link} from 'react-router-dom'
+import {Link, Outlet} from 'react-router-dom'
 import { FiSearch } from "react-icons/fi";
 import{FaFile} from  'react-icons/fa' 
 
 export default function Navbar() {
   const[SearchBoxVisibility, setSearchboxvisibility] = useState(false)
   return (
+    <>
     <nav className='z-10 sticky top-0 flex items-center 
     gap-12 w-full px-[5vw] py-5 h-[80px] border-b border-grey
      bg-white'>
@@ -40,7 +41,7 @@ export default function Navbar() {
                <FaFile />
                <p>Write</p>
             </Link>
-            <Link to='/signin' className='py-2 whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-xl capitalize hover:bg-opacity-90'>
+            <Link to='/signin' className=' whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-xl capitalize hover:bg-opacity-90'>
                 Sign in
             </Link>
             <Link to='/signup' className='bg-gray-100 text-black whitespace-nowrap   rounded-full py-3 px-6 text-xl capitalize hover:bg-opacity-90'>
@@ -48,8 +49,9 @@ export default function Navbar() {
             </Link>
 
           </div>
-
-        
-    </nav>
+        </nav>
+        <Outlet/>
+  
+    </>
   )
 }
