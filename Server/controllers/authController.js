@@ -51,7 +51,7 @@ export const SignUp=async(req,res)=>{
     })
     try {
         await newUser.save();
-        res.status(201).json({
+        return res.status(201).json({
             success:true,
             newUser
         }
@@ -84,15 +84,21 @@ export const SignIn=async (req,res,next)=>{
         success:false,
         error:"Invalid password"
     });
-    // const token=jwt.sign({id:users._id,email:users.email},process.env.SECRET);
-    // const {password:pass,...rest}=users._doc
-    // res.cookie('token',token,{httpOnly:true}).status(200).json(rest);
-
-    res.status(200).json({
+    if(validUser){
+        const token=jwt.sign({id:validUser._id,email:validUser.email},process.env.SECRET);
+        const {password:pass,...rest}=validUser._doc
+        return res.cookie('token',token,{httpOnly:true}).status(200).json(rest);
+    }
+    //const token=jwt.sign({id:validUser._id},process.env.SECRET);
+    
+    return res.status(200).json({
+        token,
         success:true,
         message:"User logged in successfully",
         validUser
     });
+   
+
 
     } catch (error) {
         return res.status(404).json(error)
