@@ -1,4 +1,4 @@
-import mongoose,{Schema} from mongoose
+import mongoose,{Schema} from 'mongoose'
 const userSchema=mongoose.Schema({
     personal_info: {
         fullname: {
@@ -26,9 +26,7 @@ const userSchema=mongoose.Schema({
         },
         profile_img: {
             type: String,
-            default: () => {
-                return `https://api.dicebear.com/6.x/${profile_imgs_collections_list[Math.floor(Math.random() * profile_imgs_collections_list.length)]}/svg?seed=${profile_imgs_name_list[Math.floor(Math.random() * profile_imgs_name_list.length)]}`
-            } 
+            default: ""
         },
     },
     social_links: {
