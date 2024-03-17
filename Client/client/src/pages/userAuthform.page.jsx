@@ -5,17 +5,25 @@ import {Link} from 'react-router-dom'
 import AnimationWrapper from '../Common/page-animation'
 import {Toaster,toast} from 'react-hot-toast'
 import axios from 'axios'
+import { useContext } from 'react'
+import { UserContext } from '../App'
 import { storeInSession } from '../Common/session'
 export default function UserAuthform({type}) {
   let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
   let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
   
-
+  let {userAuth:{token} , setUserAuth} =useContext(UserContext)
   const userAuthThroughServer=(serverRoute,formData)=>{
     axios.post(`/api/auth/${serverRoute}`,formData)
     .then(({data})=>{
       storeInSession("user",JSON.stringify(data))
-      console.log(sessionStorage)
+      setUserAuth(data)
+      {
+        serverRoute=='sign-in' 
+        ? toast.success("logged in successfully") 
+        : toast.success("user created successfully")
+      }
+     
     })
     .catch(({response})=>{
       toast.error(response.data.error)
@@ -24,7 +32,7 @@ export default function UserAuthform({type}) {
   }
   const handlesubmit=async(e)=>{ 
     e.preventDefault()
-    let serverRoute=type=="sign-in"?"/signin":"/signup"
+    let serverRoute=type=="sign-in"?"signin":"signup"
     let form=new FormData(formElement)
     let formData={}
     for(let [key,value] of form.entries()){
@@ -52,6 +60,9 @@ export default function UserAuthform({type}) {
   }
 
   return (
+    token ?
+    <Navigate to='/'/>
+    :
     <AnimationWrapper keyValue={type}>
         <section className='h-cover flex items-center justify-center'>
             <Toaster/>
