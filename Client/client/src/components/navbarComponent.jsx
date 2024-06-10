@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { FaSearch , FaFile, FaRegBell } from "react-icons/fa"
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 
 export default function NavbarComponent() {
   const[searchBoxVisibility,setsearchBoxVisibility]=useState(false)
   return (
+    <>
     <nav className='navbar'>
        <Link to='/' className='flex-none w-10'>
            <img src='https://github.com/kunaal438/mern-blogging-website/blob/master/blogging%20website%20-%20frontend/src/imgs/logo.png?raw=true' alt="logo" className='w-full'/>
@@ -39,5 +40,7 @@ export default function NavbarComponent() {
               </Link>
         </div>
     </nav>
+    <Outlet />
+    </>
   )
 }
