@@ -6,7 +6,7 @@ dotenv.config()
 
 
 export const signup=async(req,res,next)=>{
-    const[username,email,password]=req.body
+    const{username,email,password}=req.body
     try{
         if(!username||!email||!password){
             return next(errorhandler(400,"All the fields are required"))
@@ -38,7 +38,7 @@ export const signup=async(req,res,next)=>{
     }
 }
 export const signin=async(req,res,next)=>{
-    const[username,email]=req.body
+    const{username,email}=req.body
     try{
         if(!username||!email){
             return next(errorhandler(400,"All the fields are required"))
