@@ -1,15 +1,22 @@
 import express from 'express'
 import cors from 'cors'
-import cookieparser from 'cookie-parser'
-import authroute from './Routes/authRoutes.js'
+import cookieParser from 'cookie-parser'
+import authroutes from './Routes/authRoutes.js'
+import errorMiddleware from './Middlewares/errorMiddleware.js'
+
 const app=express()
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 app.use(cors({
     origin:'*',
     credentials:true
 }))
-app.use(cookieparser())
-app.use('/api/auth',authroute)
+app.use(cookieParser())
+//app.use(errorMiddleware())
+
+app.use('/user',authroutes)
+app.use(errorMiddleware)
+
 
 export default app
 
