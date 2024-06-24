@@ -6,38 +6,48 @@ dotenv.config();
 
 const userSchema = mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: [true, 'Name is required'],
-      minlength: [5, 'Name must be at least 5 characters'],
-      lowercase: true,
-      trim: true, // Removes unnecessary spaces
-    },
-    email: {
-      type: String,
-      required: [true, 'Email is required'],
-      unique: true,
-      lowercase: true,
-      match: [
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        'Please fill in a valid email address',
-      ], // Matches email against regex
-    },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      minlength: [8, 'Password must be at least 8 characters'],
-      select: false, // Will not select password upon looking up a document
-    },
-    
-    avatar: {
-      public_id: {
-        type: String,
+      personal_info:{
+        username: {
+          type: String,
+          required: [true, 'Name is required'],
+          minlength: [5, 'Name must be at least 5 characters'],
+          lowercase: true,
+          trim: true, // Removes unnecessary spaces
+        },
+        email: {
+          type: String,
+          required: [true, 'Email is required'],
+          unique: true,
+          lowercase: true,
+          match: [
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            'Please fill in a valid email address',
+          ], // Matches email against regex
+        },
+        password: {
+          type: String,
+          required: [true, 'Password is required'],
+          minlength: [8, 'Password must be at least 8 characters'],
+          select: false, // Will not select password upon looking up a document
+        },
+        bio: {
+          type: String,
+          maxlength: [200, 'Bio should not be more than 200'],
+          default: "",
+        },
+        
+        avatar: {
+          public_id: {
+            type: String,
+          },
+          secure_url: {
+            type: String,
+          },
+        },
+
       },
-      secure_url: {
-        type: String,
-      },
-    },
+  
+   
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date,
     social_links: {

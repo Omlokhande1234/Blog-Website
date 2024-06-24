@@ -22,20 +22,24 @@ export const signup=async(req,res,next)=>{
             return next(errorhandler(400,"User already exists"))
         }
         const hashedPassword=bcrypt.hashSync(password,12)
-        const user=await User.create({
-            username,
-            email,
-            password:hashedPassword,
-            avatar:{
-                public_id:email,
-                secure_url:"https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg"
+        const user=await new User({
+            personal_info:{
+                username,
+                email,
+                password:hashedPassword,
+                avatar:{
+                   public_id:email,
+                   secure_url:"https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg"
+                },
             }
+           
         })
         if(!user){
             return next(errorhandler(400,"User not cretaed successfully"))
         }
         if(req.file){
             try{
+                console.log(`req fille multer:-` , req.file)
                 const result=await cloudinary.v2.uploader.upload(req.file.path,{
                     folder:'lms',
                     width:250,
@@ -44,14 +48,14 @@ export const signup=async(req,res,next)=>{
                     crop:'fill'
                 })
                 if(result){
-                    user.avatar.public_id=result.public_id
-                    user.avatar.secure_url=result.secure_url
+                    user.personal_info.avatar.public_id=result.public_id
+                    user.personal_info.avatar.secure_url=result.secure_url
 
                     fs.rm(`uploads/${req.file.filename}`)
                 }
             }
             catch(error){
-                return next(errorhandler(400,"Error in uploading the image"))
+                return next(errorhandler(400,error.message))
             }
 
         }

@@ -7,8 +7,8 @@ dotenv.config()
 
 cloudinary.v2.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-    cloud_api:process.env.CLOUDINARY_API_KEYS,
-    cloud_secret:process.env.CLOUDINARY_SECRET
+    api_key:process.env.CLOUDINARY_API_KEYS,
+    api_secret:process.env.CLOUDINARY_SECRET
 })
 const PORT=process.env.PORT
 app.listen(PORT,async()=>{
