@@ -12,7 +12,7 @@ const cookieOption={
     httpOnly:true
 }
 export const signup=async(req,res,next)=>{
-    const{username,email,password}=req.body
+    const{username,email,password,bio}=req.body
     try{
         if(!username||!email||!password){
             return next(errorhandler(400,"All the fields are required"))
@@ -31,6 +31,7 @@ export const signup=async(req,res,next)=>{
                    public_id:email,
                    secure_url:"https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg"
                 },
+                bio
             }
            
         })
@@ -41,7 +42,7 @@ export const signup=async(req,res,next)=>{
             try{
                 console.log(`req fille multer:-` , req.file)
                 const result=await cloudinary.v2.uploader.upload(req.file.path,{
-                    folder:'lms',
+                    folder:'Blog',
                     width:250,
                     height:250,
                     gravity:'faces',
@@ -104,7 +105,7 @@ export const signout=(res,req,next)=>{
     res.status(200).json("User LoggedOut Successfully")
    }
    catch(error){
-    return next(400,error.message)
+    return next(errorhandler(400,error.message))
    }
 }
 export const google=async(req,res,next)=>{

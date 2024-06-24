@@ -9,10 +9,16 @@ const blogSchema = mongoose.Schema({
     },
     title: {
         type: String,
-        required: true,
+        required: [true,'Title is required'],
     },
     banner: {
-        
+        public_id:{
+            type:String
+        },
+        secure_url:{
+            type:String
+        }
+        // required: true,
     },
     des: {
         type: String,
@@ -67,5 +73,4 @@ const blogSchema = mongoose.Schema({
 
 })
 
-const Blogs= mongoose.model("Blogs", blogSchema);
-export default Blogs
+export default mongoose.model("Blogs", blogSchema);

@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 
-const userSchema = mongoose.Schema(
+const userSchema =mongoose.Schema(
   {
       personal_info:{
         username: {
@@ -86,6 +86,16 @@ const userSchema = mongoose.Schema(
           default: 0
       },
     },
+    google_auth: {
+      type: Boolean,
+      default: false
+    },
+    blogs: {
+      type: [ Schema.Types.ObjectId ],
+      ref: 'blogs',
+      default: [],
+    } 
+
   },
   {
     timestamps: true,
@@ -108,6 +118,6 @@ userSchema.methods={
 
 
 
-const User = mongoose.model('User', userSchema);
+const User = model('User', userSchema);
 
 export default User;
