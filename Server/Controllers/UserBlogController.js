@@ -74,3 +74,25 @@ export const createBlog=async(req,res,next)=>{
         return next(errorhandler(400,error.message))
     }
 }
+export const SearchUser=async(req,res,next)=>{
+    const {query}=req.body
+    try{
+        const users=await User.find({"personal_info.username":new RegExp(query,'i')})
+        .select("personal_info.username personal_info.avatar -_id")
+        .limit(5)
+        .then(users=>{
+            return res.status(200).json({
+                success:true,
+                message:"Searched users successfully",
+                users
+            })
+        })
+        .catch(error=>{
+            return next(errorhandler(400,error.message))
+        })
+
+    }
+    catch(error){
+        return next(errorhandler(400,error.message))
+    }
+}
