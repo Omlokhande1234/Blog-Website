@@ -12,6 +12,7 @@ const userSchema =mongoose.Schema(
           required: [true, 'Name is required'],
           minlength: [5, 'Name must be at least 5 characters'],
           lowercase: true,
+          unique:[true,'Username must be unique'],
           trim: true, // Removes unnecessary spaces
         },
         email: {

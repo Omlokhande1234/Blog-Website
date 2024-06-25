@@ -96,3 +96,24 @@ export const SearchUser=async(req,res,next)=>{
         return next(errorhandler(400,error.message))
     }
 }
+export const editBlog=async(req,res,next)=>{
+    const {blog_id}=req.body
+    try{
+        const blog=Blogs.findOneAndUpdate(blog_id,
+            
+                {$set:req.body},
+                {runValidators:true}
+            
+        )
+        await blog.save()
+        return res.status(200).json({
+            success:true,
+            message:"Blog updated successfully",
+            blog
+        })
+        
+    }
+    catch(error){
+        return next(errorhandler(400,error.message))
+    }
+}
