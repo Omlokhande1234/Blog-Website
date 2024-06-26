@@ -9,17 +9,17 @@ const notificationSchema = mongoose.Schema({
     blog: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'blogs'
+        ref: 'Blogs'
     },
     notification_for: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'users'
+        ref: 'User'
     },
     user: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'users'
+        ref: 'User'
     },
     comment: {
         type: Schema.Types.ObjectId,

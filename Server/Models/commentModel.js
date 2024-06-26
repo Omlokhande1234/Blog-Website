@@ -5,12 +5,12 @@ const commentSchema = mongoose.Schema({
     blog_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'blogs'
+        ref: 'Blogs'
     },
     blog_author: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'blogs',
+        ref: 'Blogs',
     },
     comment: {
         type: String,
@@ -23,10 +23,11 @@ const commentSchema = mongoose.Schema({
     commented_by: {
         type: Schema.Types.ObjectId,
         require: true,
-        ref: 'users'
+        ref: 'User'
     },
     isReply: {
         type: Boolean,
+        default: false
     },
     parent: {
         type: Schema.Types.ObjectId,
