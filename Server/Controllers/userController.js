@@ -77,16 +77,17 @@ export const signup=async(req,res,next)=>{
     }
 }
 export const signin=async(req,res,next)=>{
-    const{username,email}=req.body
+    const{email,password}=req.body
     try{
-        if(!username||!email){
+        if(!password||!email){
             return next(errorhandler(400,"All the fields are required"))
         }
-        const user=await User.findOne({email}.select('+password'))
-        if(!user||!bcrypt.compareSync(password,user.password)){
+        const user=await User.findOne({"personal_info.email":email}).select('+password')
+        //console.log(user)
+        if(!user||!bcrypt.compareSync(password,user.personal_info.password)){
             return next(errorhandler(400,"Invalid email or password"))
         }
-        const token=user.generateJWTTOKEN()
+        const token=await user.generateJWTTOKEN()
         res.cookie('token',token,cookieOption)
         res.status(200).json({
             success:true,
@@ -126,6 +127,45 @@ export const google=async(req,res,next)=>{
         }
     }
     catch(error){
+        return next(errorhandler(400,error.message))
+    }
+
+}
+export const changePassword=async(req,res,next)=>{
+    const{oldPassword,newPassword}=req.body
+    //const{_id}=req.user
+    
+    try{
+        if(!oldPassword||!newPassword){
+            return next(errorhandler(400,"All the fields are required"))
+        }
+        console.log(oldPassword)
+        const user=await User.findById(req.user.id).select('+password')
+        if(user.google_auth){
+            return next(errorhandler(400,"You can't change password for google account"))
+        }
+        console.log(user)
+        console.log(user.personal_info.password)
+        if(!user){
+            return next(errorhandler(400,"User does not exist"))
+        }
+
+        const isPasswordValid=bcrypt.compareSync(oldPassword,user.personal_info.password)
+        
+       
+        if(!isPasswordValid){
+            return next(errorhandler(400,"Password is invalid"))
+        }
+        const hashedNewPassword=bcrypt.hashSync(newPassword,10)
+        user.personal_info.password=hashedNewPassword
+        console.log(hashedNewPassword)
+        await user.save()
+        user.password=undefined
+        return res.status(200).json({
+            success:true,
+            message:"Password changed successfully"
+        })
+    }catch(error){
         return next(errorhandler(400,error.message))
     }
 

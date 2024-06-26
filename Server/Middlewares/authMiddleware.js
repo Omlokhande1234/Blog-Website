@@ -16,7 +16,7 @@ export const isLoggedin=(req,res,next)=>{
         next()
     }
     catch(error){
-        console.log(error.message)
+        console.log(error)
         return next(errorhandler(400,error.message))
     }
 }

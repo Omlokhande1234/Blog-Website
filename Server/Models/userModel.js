@@ -29,7 +29,7 @@ const userSchema =mongoose.Schema(
           type: String,
           required: [true, 'Password is required'],
           minlength: [8, 'Password must be at least 8 characters'],
-          select: false, // Will not select password upon looking up a document
+          //select: false, // Will not select password upon looking up a document
         },
         bio: {
           type: String,

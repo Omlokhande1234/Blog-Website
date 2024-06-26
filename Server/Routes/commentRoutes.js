@@ -5,6 +5,6 @@ const router=Router()
 router.post('/add-comment',isLoggedin,addComment)
 router.get('/getBlog-comments',getBlogComments)
 router.get('/getComment-replies',getCommentReplies)
-router.del('/delete-comments',isLoggedin,DeleteComments)
+router.delete('/delete-comments',isLoggedin,DeleteComments)
 
 export default router
