@@ -170,3 +170,22 @@ export const changePassword=async(req,res,next)=>{
     }
 
 }
+export const getProfile=async(req,res,next)=>{
+    const {username}=req.body
+    try{
+        const user=User.findOne({"personal_info.username":username})
+                   .select("-blogs personal_info.password -updatedAt -google_auth")
+        if(!user){
+            return next(errorhandler(400,"User don't exists"))
+        }
+        return res.status(200).json({
+            success:true,
+            message:"User fetched successfully",
+            user
+        })
+
+    }
+    catch(error){
+
+    }
+}
