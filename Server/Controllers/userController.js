@@ -12,7 +12,7 @@ const cookieOption={
     httpOnly:true
 }
 export const signup=async(req,res,next)=>{
-    const{username,email,password,bio}=req.body
+    const{username,email,password,bio,social_links}=req.body
     try{
         if(!username||!email||!password){
             return next(errorhandler(400,"All the fields are required"))
@@ -31,7 +31,8 @@ export const signup=async(req,res,next)=>{
                    public_id:email,
                    secure_url:"https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg"
                 },
-                bio
+                bio,
+                social_links
             }
            
         })
@@ -188,4 +189,40 @@ export const getProfile=async(req,res,next)=>{
     catch(error){
 
     }
+}
+export const UpdateProfile=async(req,res,next)=>{
+    const{username,bio,social_links}=req.body
+    let socialLinksArr=Object.keys(social_links)
+    try{
+        for(let i=0;i<socialLinksArr.length;i++){
+            if(social_links[socialLinksArr[i]].length){
+                let url=new URL(social_links[socialLinksArr[i]])
+                console.log(url)
+                let hostname=url.hostname
+                if(!hostname.includes(`${socialLinksArr[i]}.com`)&&socialLinksArr[i]!='website'){
+                    return next(errorhandler(400,`${socialLinksArr[i]} Invalid social link`))
+                }
+            }
+        }
+    }
+    catch(error){
+        console.log(error)
+        return next(errorhandler(400,error.message))
+    }
+    let updateObj={
+        'personal_info.username':username,
+        'personal_info.bio':bio,
+         social_links
+    }
+    User.findOneAndUpdate({_id:req.user.id},updateObj,{
+         runValidators:true
+    })
+    .then((user)=>{
+        return res.status(200).json({
+            success:true,
+            message:"Profile updated successfully",
+            user
+        })
+
+    })
 }
