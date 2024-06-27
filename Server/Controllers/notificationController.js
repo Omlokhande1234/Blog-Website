@@ -25,7 +25,7 @@ export const newNotification=async(req,res,next)=>{
          return next(errorhandler(400,error,message))
     })
 }
-export const notification=(req,res,next)=>{
+export const getNotification=(req,res,next)=>{
     let user_id=req.user.id
     let{page,filter,deleteCount}=req.body
     let maxlimit=10
@@ -48,6 +48,10 @@ export const notification=(req,res,next)=>{
     .sort({createdAt:-1})
     .select("createdAt type seen reply")
     .then(notifications=>{
+        Notification.updateMany(findQuery,{seen:true})
+        .skip(skipDocs)
+        .limit(maxlimit)
+        .then(seen=>console.log("Notification seen"))
         return res.status(200).json({notifications})
     })
     .catch(error=>{

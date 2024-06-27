@@ -6,7 +6,7 @@ import Blogs from '../Models/blogModel.js'
 
 export const addComment=async(req,res,next)=>{
     const user_id=req.user.id
-    const{_id,comment,replying_to,blog_author}=req.body
+    const{_id,comment,replying_to,blog_author,notification_id}=req.body
     if(!comment.length){
         return next(errorhandler(400,"Comment is required"))
     }
@@ -37,19 +37,28 @@ export const addComment=async(req,res,next)=>{
             blog:_id,
             notification_for:blog_author,
             user:user_id,
-            comment:commentFile._id
+            comment:commentFile._id,
+            
          }
          if(replying_to){
             notificationObj.replied_on_comment=replying_to
+            
 
             await comments.findOneAndUpdate({_id:replying_to},
                 {$push:{children:commentFile._id}}
             ).then(replyingTOComment=>
                 {notificationObj.notification_for=replyingTOComment.commented_by})
+            if(notification_id){
+               Notification.findOneAndUpdate({_id:notification_id},{reply:commentFile._id})
+               .then(notification=>console.log("notification updated"))
+            }
 
          }
          new Notification(notificationObj).save()
-         .then(notification=>console.log('new notification created'))
+         .then(notification=>
+            console.log(notification)
+            //console.log('new notification created'))
+         )
          .catch(error=>console.log(error.message))
 
          return res.status(200).json({
@@ -151,7 +160,14 @@ const deleteComments=(_id)=>{
             // notification
             Notification.findOneAndDelete({comment:_id}).then(notification=>console.log("Comment notification deleted successfully"))
             //here we will match the reply id 
+            
+            //Here the below command while deleting the reply comment it will also delete the parent comment
+            //as reply has the same id as the parent comment hence we will not using following line
             Notification.findOneAndDelete({reply:_id}).then(notification=>console.log('Reply of the comment deleted successfully'))
+            //Instead we will use the below line which will just update the reply set to
+            //empty or remove everything from reply by using unset method of the mongoose
+            Notification.findOneAndUpdate({reply:_id},{$unset:{reply:1}}).then(notification=>console.log('Reply of the comment deleted successfully'))
+            //here we are just removing the reply from parrent comment collections
 
             //Now removing the comments from the blog comment array
             Blogs.findOneAndUpdate({_id:comment.blog_id},{$pull:{comments:_id}
